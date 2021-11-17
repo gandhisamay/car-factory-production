@@ -5,6 +5,7 @@ public interface Part {
     String getCompanyName();
     int getPrice();
     double getWeight();
+    
     @Override
     String toString();
 }
