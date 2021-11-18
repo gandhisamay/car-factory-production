@@ -1,7 +1,6 @@
 package Interfaces;
-public interface Part {
+public interface PartI {
     void fixPart();
-    double getFittingTime();
     String getCompanyName();
     int getPrice();
     double getWeight();

@@ -1,6 +1,13 @@
 package Constants;
 import java.util.HashMap;
 
+import Models.Parts.Chassis;
+import Models.Parts.Colors;
+import Models.Parts.Engine;
+import Models.Parts.Frame;
+import Models.Parts.Interiors;
+import Models.Parts.Wheel;
+
 public final class Constants {
     public static final String FRAME = "Frame"; 
     public static final String WHEEL = "Wheel"; 
@@ -27,4 +34,16 @@ public final class Constants {
        
        return partsAvailable;
     }
+
+    public static HashMap<String, Integer> getPartsWithTime(){
+        HashMap<String, Integer> partsWithTime = new HashMap<>();
+        partsWithTime.put(FRAME, Frame.FITTING_TIME);
+        partsWithTime.put(WHEEL, Wheel.FITTING_TIME);
+        partsWithTime.put(ENGINE,Engine.FITTING_TIME);
+        partsWithTime.put(INTERIORS, Interiors.FITTING_TIME);
+        partsWithTime.put(CHASSIS, Chassis.FITTING_TIME);
+        partsWithTime.put(COLORS, Colors.COLORING_TIME);
+        
+        return partsWithTime;
+     }
 }

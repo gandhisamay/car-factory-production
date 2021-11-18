@@ -14,7 +14,7 @@ public class Assembler {
         HashMap<String, Integer> availableParts = Constants.getAvailableParts();
         var availablePartsSet = availableParts.entrySet();
 
-        List<HashMap<String,Integer>> partInfo = new ArrayList<>();
+        // List<HashMap<String,Integer>> partInfo = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
 
@@ -43,11 +43,13 @@ public class Assembler {
 
             }
 
-            partInfo.add(partsByLine);
+            // partInfo.add(partsByLine);
+
+            new AssemblyLine(partsByLine, 5).start();
 
         }
 
-        System.out.println(partInfo);
+        // System.out.println(partInfo);
         in.close();
     }
 }

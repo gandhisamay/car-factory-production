@@ -1,5 +1,5 @@
 package Interfaces;
-public interface Car {
+public interface CarI {
     void getPartDetails();
     double getMileage();
     int getPrice();

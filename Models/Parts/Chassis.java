@@ -1,4 +1,15 @@
 package Models.Parts;
-public class Chassis {
-    
+
+public class Chassis extends Part {
+    private final String metal = "Aluminium";
+    public static final int FITTING_TIME = 1000;  //Fitting Time in milliseconds
+
+    Chassis(String companyName, int price, int weight){
+        super(companyName, price, weight);
+    }
+
+    public String getMetal() {
+        return metal;
+    }
+
 }
