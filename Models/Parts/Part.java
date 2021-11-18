@@ -12,12 +12,6 @@ public class Part implements PartI{
         this.weight = weight;
     }
 
-
-    @Override
-    public void fixPart() {   
-        
-    }
-
     @Override
     public String getCompanyName() {
         return companyName;

@@ -2,7 +2,7 @@ package Models;
 import java.util.*;
 import Constants.Constants;
 
-public class Assembler {
+public class Assembler{
 
     public void runFactory(){
         Scanner in = new Scanner(System.in);
@@ -11,15 +11,12 @@ public class Assembler {
         System.out.print("Enter the number of assembly lines in factory :");
         int n = in.nextInt();
 
-        HashMap<String, Integer> availableParts = Constants.getAvailableParts();
-        var availablePartsSet = availableParts.entrySet();
-
-        // List<HashMap<String,Integer>> partInfo = new ArrayList<>();
+        List<HashMap<String,Integer>> partInfo = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
 
             HashMap<String, Integer> partsByLine = new HashMap<>();
-            var it = availablePartsSet.iterator();
+            Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(Constants.getAvailableParts());
             System.out.println("For Assembly Line " + i);
 
             while(it.hasNext()){
@@ -43,13 +40,16 @@ public class Assembler {
 
             }
 
-            // partInfo.add(partsByLine);
-
-            new AssemblyLine(partsByLine, 5).start();
+            partInfo.add(partsByLine);
 
         }
 
-        // System.out.println(partInfo);
+        for (int i = 0; i < partInfo.size(); i++) {
+
+            new AssemblyLine(partInfo.get(i), 2, i+1).start();
+            
+        }
+
         in.close();
     }
 }

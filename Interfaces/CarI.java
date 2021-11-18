@@ -1,9 +1,6 @@
 package Interfaces;
 public interface CarI {
-    void getPartDetails();
     double getMileage();
     int getPrice();
-    
-    @Override
-    String toString();
+    void fixPart(String partName, int partType);
 }

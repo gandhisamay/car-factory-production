@@ -1,4 +1,5 @@
 package Models;
+
 import java.util.*;
 import Constants.Constants;
 
@@ -8,10 +9,16 @@ public class AssemblyLine extends Thread {
     private String currentPartBeingFixed;
     private int numberOfCarsToProduce;
     private boolean carCompletelyProduced;
+    private int assemblyLineNum;
 
-    AssemblyLine(HashMap<String, Integer> partsProducedByLine, int numberOfCarsToProduce) {
+    AssemblyLine(HashMap<String, Integer> partsProducedByLine, int numberOfCarsToProduce, int assemblyLineNum) {
         this.partsProducedByLine = partsProducedByLine;
         this.numberOfCarsToProduce = numberOfCarsToProduce;
+        this.assemblyLineNum = assemblyLineNum;
+    }
+
+    public int getAssemblyLineNum() {
+        return assemblyLineNum;
     }
 
     public int getCurrentCarNumber() {
@@ -30,16 +37,30 @@ public class AssemblyLine extends Thread {
         this.currentPartBeingFixed = currentPartBeingFixed;
     }
 
+    public int carsProducedTillNow() {
+        return currentCarNumber - 1;
+    }
+
+    public void fixPart(String partName, int partTime, int carNum, Car car) throws InterruptedException {
+        Thread.sleep(partTime);
+        car.fixPart(partName, partsProducedByLine.get(partName));
+    }
+
     public String currentStatus() {
 
         StringBuffer sb = new StringBuffer();
 
-        sb.append("Current Status \n");
-
         if (carCompletelyProduced) {
-            sb.append(carsProducedTillNow() + " Cars Production Completed");
+            
+            sb.append("Production Complete \n");
+            sb.append(carsProducedTillNow() + " Cars Production Completed at Assembly Line " + assemblyLineNum);
+            sb.append("\n");
         } else {
-            sb.append("Fixin " + currentPartBeingFixed + " in the " + currentCarNumber + "th car");
+            
+            sb.append("Current Status \n");
+            sb.append("Fixing " + currentPartBeingFixed + " in the " + currentCarNumber + "th car at Assembly Line "
+                    + assemblyLineNum);
+            sb.append("\n");
         }
 
         return sb.toString();
@@ -64,15 +85,10 @@ public class AssemblyLine extends Thread {
         return sb.toString();
     }
 
-    public int carsProducedTillNow() {
-        return currentCarNumber - 1;
-    }
-
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        var partsByLine = partsProducedByLine.entrySet();
-        var it = partsByLine.iterator();
+        Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(partsProducedByLine);
 
         sb.append("Assembly Line Specs\n");
         sb.append("Format : part - type of part\n");
@@ -101,39 +117,38 @@ public class AssemblyLine extends Thread {
         // 4) Colors
         // 5) Interiors
 
-        HashMap<String, Integer> partsVsTime = Constants.getPartsWithTime();
-
-        var parts = partsVsTime.entrySet();
-
         // Loop for producing n cars
 
         for (int i = 1; i <= numberOfCarsToProduce; i++) {
             carCompletelyProduced = false;
             setCurrentCarNumber(i);
+            Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(Constants.getPartsWithTime());
 
-            var it = parts.iterator();
+            //Create a new Car Model
+            Car car = new Car();
 
+            // Fit parts
 
-            // Fit Chassis
-
-            while(it.hasNext()){
-                Map.Entry<String, Integer> part = (Map.Entry<String, Integer>)it.next();
+            while (it.hasNext()) {
+                Map.Entry<String, Integer> part = (Map.Entry<String, Integer>) it.next();
 
                 final String partType = part.getKey();
-                final int partTime= part.getValue();
+                final int partTime = part.getValue();
 
-                setCurrentPartBeingFixed(partType);
                 try {
-                    Thread.sleep(partTime);
+                    fixPart(partType, partTime, i, car);
                 } catch (InterruptedException e) {
-                    System.out.println("Process Failed while adding a " +  partType + "in car " + i);
+                    System.out.println("Process Failed while adding a " + partType + "in car " + i);
                     continue;
                 }
+
+                setCurrentPartBeingFixed(partType);
                 System.out.println(currentStatus());
             }
 
             carCompletelyProduced = true;
         }
+        setCurrentCarNumber(numberOfCarsToProduce + 1);
         System.out.println(currentStatus());
     }
 }
