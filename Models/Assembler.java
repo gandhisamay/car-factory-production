@@ -12,6 +12,7 @@ public class Assembler{
         int n = in.nextInt();
 
         List<HashMap<String,Integer>> partInfo = new ArrayList<>();
+        List<Integer> numOfCarsPerAssLine = new ArrayList<>(); 
 
         for (int i = 1; i <= n; i++) {
 
@@ -40,13 +41,19 @@ public class Assembler{
 
             }
 
+            System.out.println("Number of cars to produce on Assembly Line " + i);
+            int numOfCars = in.nextInt();
+
+            numOfCarsPerAssLine.add(numOfCars);
+
+
             partInfo.add(partsByLine);
 
         }
 
-        for (int i = 0; i < partInfo.size(); i++) {
-
-            new AssemblyLine(partInfo.get(i), 2, i+1).start();
+        for (int i = 1; i <= partInfo.size(); i++) {
+            
+            new AssemblyLine(partInfo.get(i-1),numOfCarsPerAssLine.get(i-1) , i).start();
             
         }
 

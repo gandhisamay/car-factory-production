@@ -52,12 +52,12 @@ public class AssemblyLine extends Thread {
 
         if (carCompletelyProduced) {
             
-            sb.append("Production Complete \n");
+            // sb.append("Production Complete \n");
             sb.append(carsProducedTillNow() + " Cars Production Completed at Assembly Line " + assemblyLineNum);
             sb.append("\n");
         } else {
             
-            sb.append("Current Status \n");
+            // sb.append("Current Status \n");
             sb.append("Fixing " + currentPartBeingFixed + " in the " + currentCarNumber + "th car at Assembly Line "
                     + assemblyLineNum);
             sb.append("\n");
@@ -149,6 +149,6 @@ public class AssemblyLine extends Thread {
             carCompletelyProduced = true;
         }
         setCurrentCarNumber(numberOfCarsToProduce + 1);
-        System.out.println(currentStatus());
+        System.out.println("PRODUCTION COMPLETE!");
     }
 }

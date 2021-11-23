@@ -30,11 +30,9 @@ public class Car implements CarI{
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-
         sb.append("Car Specifications\n"); 
 
         Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(parts);
-
         int i = 1;
 
         while (it.hasNext()) {
