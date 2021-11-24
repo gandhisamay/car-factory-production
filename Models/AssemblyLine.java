@@ -1,18 +1,36 @@
 package Models;
 
-import java.util.*;
 import Constants.Constants;
+import Models.Parts.Chassis;
+import Models.Parts.Color;
+import Models.Parts.Engine;
+import Models.Parts.Frame;
+import Models.Parts.Interiors;
+import Models.Parts.Wheel;
 
 public class AssemblyLine extends Thread {
-    private HashMap<String, Integer> partsProducedByLine = new HashMap<>();
+    // private HashMap<String, Part> partsProducedByLine = new HashMap<>();
+
+    private Chassis chassis;
+    private Color color;
+    private Engine engine;
+    private Frame frame;
+    private Interiors interiors;
+    private Wheel wheel;
     private int currentCarNumber;
     private String currentPartBeingFixed;
     private int numberOfCarsToProduce;
     private boolean carCompletelyProduced;
     private int assemblyLineNum;
 
-    AssemblyLine(HashMap<String, Integer> partsProducedByLine, int numberOfCarsToProduce, int assemblyLineNum) {
-        this.partsProducedByLine = partsProducedByLine;
+    AssemblyLine(Chassis chassis, Color color, Engine engine, Interiors interiors, Frame frame, Wheel wheels,
+            int numberOfCarsToProduce, int assemblyLineNum) {
+        this.chassis = chassis;
+        this.color = color;
+        this.engine = engine;
+        this.interiors = interiors;
+        this.frame = frame;
+        this.wheel = wheels;
         this.numberOfCarsToProduce = numberOfCarsToProduce;
         this.assemblyLineNum = assemblyLineNum;
     }
@@ -41,69 +59,31 @@ public class AssemblyLine extends Thread {
         return currentCarNumber - 1;
     }
 
-    public void fixPart(String partName, int partTime, int carNum, Car car) throws InterruptedException {
-        Thread.sleep(partTime);
-        car.fixPart(partName, partsProducedByLine.get(partName));
-    }
-
-    public String currentStatus() {
+    public void currentStatus() {
 
         StringBuffer sb = new StringBuffer();
-
         if (carCompletelyProduced) {
-            
-            // sb.append("Production Complete \n");
             sb.append(carsProducedTillNow() + " Cars Production Completed at Assembly Line " + assemblyLineNum);
-            sb.append("\n");
         } else {
-            
-            // sb.append("Current Status \n");
             sb.append("Fixing " + currentPartBeingFixed + " in the " + currentCarNumber + "th car at Assembly Line "
                     + assemblyLineNum);
-            sb.append("\n");
         }
 
-        return sb.toString();
-    }
-
-    public String getAssemblyDetails() {
-        StringBuffer sb = new StringBuffer();
-        var partsByLine = partsProducedByLine.entrySet();
-        var it = partsByLine.iterator();
-
-        sb.append("Assembly Line Specs\n");
-        sb.append("Part - Type of Part\n");
-
-        int i = 1;
-
-        while (it.hasNext()) {
-            Map.Entry<String, Integer> me = (Map.Entry<String, Integer>) it.next();
-            sb.append(i + ". " + me.getKey() + " - " + me.getValue() + "\n");
-            i++;
-        }
-
-        return sb.toString();
+        System.out.println(sb);
     }
 
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(partsProducedByLine);
 
         sb.append("Assembly Line Specs\n");
         sb.append("Format : part - type of part\n");
-
-        int i = 1;
-
-        while (it.hasNext()) {
-            Map.Entry<String, Integer> me = (Map.Entry<String, Integer>) it.next();
-            sb.append(i + ". " + me.getKey() + " - " + me.getValue() + "\n");
-            i++;
-        }
-
+        sb.append("1. " + chassis.getPartName() +  " " + chassis.getPartType());
+        sb.append("2. " + frame.getPartName() +  " " + chassis.getPartType());
+        sb.append("3. " + engine.getPartName() +  " " + chassis.getPartType());
+        sb.append("4. " + interiors.getPartName() +  " " + chassis.getPartType());
+        sb.append("5. " + "Interior Color: " + color.getInteriorColor() + " Frame Color: " + color.getFrameColor());
         sb.append("\n");
-
-        sb.append(currentStatus());
 
         return sb.toString();
     }
@@ -114,41 +94,59 @@ public class AssemblyLine extends Thread {
         // 1) Chassis
         // 2) Frame
         // 3) Engine
-        // 4) Colors
-        // 5) Interiors
+        // 4) Interiors
+        // 5) Colors
 
         // Loop for producing n cars
 
         for (int i = 1; i <= numberOfCarsToProduce; i++) {
             carCompletelyProduced = false;
             setCurrentCarNumber(i);
-            Iterator<Map.Entry<String,Integer>> it = Constants.getIterator(Constants.getPartsWithTime());
 
-            //Create a new Car Model
+            // Create a new Car Model
             Car car = new Car();
 
             // Fit parts
+            try {
 
-            while (it.hasNext()) {
-                Map.Entry<String, Integer> part = (Map.Entry<String, Integer>) it.next();
+                setCurrentPartBeingFixed(Constants.CHASSIS);
+                Thread.sleep(chassis.getFittingTime());
+                car.fixChassis(chassis);
+                currentStatus();
 
-                final String partType = part.getKey();
-                final int partTime = part.getValue();
+                setCurrentPartBeingFixed(Constants.FRAME);
+                Thread.sleep(frame.getFitingTime());
+                car.fixFrame(frame);
+                currentStatus();
 
-                try {
-                    fixPart(partType, partTime, i, car);
-                } catch (InterruptedException e) {
-                    System.out.println("Process Failed while adding a " + partType + "in car " + i);
-                    continue;
-                }
+                setCurrentPartBeingFixed(Constants.ENGINE);
+                Thread.sleep(engine.getFittingTime());
+                car.fixEngine(engine);
+                currentStatus();
 
-                setCurrentPartBeingFixed(partType);
-                System.out.println(currentStatus());
+                setCurrentPartBeingFixed(Constants.INTERIORS);
+                Thread.sleep(interiors.getFittingTime());
+                car.fixInteriors(interiors);
+                currentStatus();
+
+                setCurrentPartBeingFixed(Constants.COLORS);
+                Thread.sleep(color.getColoringTime());
+                car.applyColor(color);
+                currentStatus();
+
+                setCurrentPartBeingFixed(Constants.WHEEL);
+                Thread.sleep(wheel.getFitingTime());
+                car.fixWheels(wheel);
+                currentStatus();
+
+            } catch (InterruptedException e) {
+                System.out.println("Process Failed!");
             }
 
             carCompletelyProduced = true;
         }
+
         setCurrentCarNumber(numberOfCarsToProduce + 1);
-        System.out.println("PRODUCTION COMPLETE!");
+        System.out.println("PRODUCTION COMPLETE! ON ASSEMBLY LINE " + assemblyLineNum);
     }
 }

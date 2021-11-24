@@ -1,15 +1,37 @@
 package Models.Parts;
 
-public class Chassis extends Part {
-    private final String metal = "Aluminium";
-    public static final int FITTING_TIME = 600;  //Fitting Time in milliseconds
+import Constants.Constants;
+import Interfaces.Parts.ChassisI;
+import Models.Part;
 
-    Chassis(String companyName, int price, int weight){
+public class Chassis extends Part implements ChassisI {
+    private int partType;
+    private int fittingTime = 500;
+    private final String partName = Constants.CHASSIS;
+
+    public Chassis(int partType, String companyName, int price, double weight) {
         super(companyName, price, weight);
+        this.partType = partType;
     }
 
-    public String getMetal() {
-        return metal;
+    public String getPartName() {
+        return partName;
+    }
+
+    public int getFittingTime() {
+        return fittingTime;
+    }
+
+    public void setFittingTime(int fittingTime) {
+        this.fittingTime = fittingTime;
+    }
+
+    public int getPartType() {
+        return partType;
+    }
+
+    public void setPartType(int partType) {
+        this.partType = partType;
     }
 
 }

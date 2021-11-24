@@ -1,13 +1,40 @@
 package Models.Parts;
 
-public class Engine extends Part {
+import Constants.Constants;
+import Interfaces.Parts.EngineI;
+import Models.Part;
+
+public class Engine extends Part implements EngineI{
 
     private final double power = 10;
     private final double pickupTime = 8;
-    public static final int FITTING_TIME = 300;  //Fitting Time in milliseconds
+    private int fittingTime = 400;  //Fitting Time in milliseconds
+    private int partType;
+    private final String partName = Constants.ENGINE;
 
-    Engine(String companyName, int price, int weight){
+    public Engine(int partType, String companyName, int price, double weight) {
         super(companyName, price, weight);
+        this.partType = partType;
+    }
+
+    public String getPartName() {
+        return partName;
+    }
+
+    public int getFittingTime() {
+        return fittingTime;
+    }
+
+    public void setFittingTime(int fittingTime) {
+        this.fittingTime = fittingTime;
+    }
+
+    public int getPartType() {
+        return partType;
+    }
+
+    public void setPartType(int partType) {
+        this.partType = partType;
     }
 
     public double getPickupTime() {
