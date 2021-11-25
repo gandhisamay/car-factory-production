@@ -18,17 +18,10 @@ public class Car implements CarI{
     private Interiors interiors;
     private Wheel wheel;
 
-    Car(){
-
-    }
-    
-
-    @Override
     public double getMileage() {
         return MILEAGE;
     }
 
-    @Override
     public int getPrice() {
         return PRICE_VAL;
     }
@@ -51,6 +44,7 @@ public class Car implements CarI{
         return chassis;
     }
 
+    @Override
     public void fixChassis(Chassis chassis) {
         this.chassis = chassis;
     }
@@ -58,7 +52,8 @@ public class Car implements CarI{
     public Color getColor() {
         return color;
     }
-
+    
+    @Override
     public void applyColor(Color color) {
         this.color = color;
     }
@@ -66,7 +61,8 @@ public class Car implements CarI{
     public Engine getEngine() {
         return engine;
     }
-
+    
+    @Override
     public void fixEngine(Engine engine) {
         this.engine = engine;
     }
@@ -74,7 +70,8 @@ public class Car implements CarI{
     public Frame getFrame() {
         return frame;
     }
-
+    
+    @Override
     public void fixFrame(Frame frame) {
         this.frame = frame;
     }
@@ -82,15 +79,17 @@ public class Car implements CarI{
     public Interiors getInteriors() {
         return interiors;
     }
-
+    
+    @Override
     public void fixInteriors(Interiors interiors) {
         this.interiors = interiors;
     }
-
+    
     public Wheel getWheel() {
         return wheel;
     }
-
+    
+    @Override
     public void fixWheels(Wheel wheel) {
         this.wheel = wheel;
     }
