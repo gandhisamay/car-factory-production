@@ -99,6 +99,8 @@ public class AssemblyLine extends Thread {
 
         // Loop for producing n cars
 
+        System.out.println("STARTING PRODUCTION!");
+
         for (int i = 1; i <= numberOfCarsToProduce; i++) {
             carCompletelyProduced = false;
             setCurrentCarNumber(i);
